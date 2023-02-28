@@ -11,7 +11,7 @@ namespace SerialConsole
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("App started - version 1.0.1");
+            Console.WriteLine("App started - version 1.0.2");
             CreateHostBuilder(args).Build().Run();
             Log.CloseAndFlush();
         }
@@ -53,7 +53,7 @@ namespace SerialConsole
                     Log.Information($"Environment: {hostContext.HostingEnvironment.EnvironmentName}");
 
                     services.AddSingleton(configuration);
-                    services.AddHostedService<SerialConsoleWorker>();
+                    services.AddHostedService<SerialWorker>();
                     services.AddSingleton<IConsoleSpinner, ConsoleSpinner>();
                 })
                 .UseSerilog();

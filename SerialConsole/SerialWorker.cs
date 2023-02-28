@@ -7,13 +7,13 @@ using System.IO.Ports;
 
 namespace SerialConsole
 {
-    public class SerialConsoleWorker : BackgroundService
+    public class SerialWorker : BackgroundService
     {
         private readonly IConsoleSpinner _consoleSpinner;
-        private readonly ILogger<SerialConsoleWorker> _logger;
+        private readonly ILogger<SerialWorker> _logger;
         private readonly SerialPort _serialPort;
 
-        public SerialConsoleWorker(IConsoleSpinner consoleSpinner, ILogger<SerialConsoleWorker> logger, IOptionsMonitor<AppSettings> optionsMonitor)
+        public SerialWorker(IConsoleSpinner consoleSpinner, ILogger<SerialWorker> logger, IOptionsMonitor<AppSettings> optionsMonitor)
         {
             _consoleSpinner = consoleSpinner ?? throw new ArgumentNullException(nameof(consoleSpinner));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -34,13 +34,15 @@ namespace SerialConsole
             _logger.LogInformation($"Working directory is {Directory.GetCurrentDirectory()}");
 
             Subscribe();
+            _serialPort.Open();
+
+            _logger.LogInformation("Listening to port...");
 
             while (true)
             {
-                Thread.Sleep(1000);
-                _consoleSpinner.Turn();
+                Thread.Sleep(int.MaxValue);
             }
-        }
+        }2
 
         public void Subscribe()
         {
@@ -49,7 +51,8 @@ namespace SerialConsole
 
         private void port_DataReceived(object sender, SerialDataReceivedEventArgs serialDataReceivedEventArgs)
         {
-            Console.WriteLine(_serialPort.ReadExisting());
+            var line = _serialPort.ReadLine();
+            _logger.LogInformation(line);
         }
     }
 }
