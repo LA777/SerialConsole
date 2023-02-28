@@ -42,7 +42,7 @@ namespace SerialConsole
             {
                 Thread.Sleep(int.MaxValue);
             }
-        }2
+        }
 
         public void Subscribe()
         {
